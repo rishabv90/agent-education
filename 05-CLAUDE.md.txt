@@ -1,0 +1,26 @@
+# CLAUDE.md — example excerpt
+# Harness-specific. Layered on top of AGENTS.md. Grows from corrections:
+# every rule below exists because an agent got it wrong once.
+
+## Verification
+- Probe the running system before reporting its state. Config files lie:
+  one said "development" while production was running.
+- Green tests are not proof. For any lock, cache, or timestamp logic,
+  check the stored value in the database, not the test fixture.
+
+## Context
+- Before a long task, read only the files named in the task. Search first,
+  then open. Never list a whole directory into context.
+- Recorded decisions can be stale. Check them against current code
+  before treating them as true.
+
+## Parallel work
+- Fan out reading. Serialize writing. Never run two agents that edit
+  the same file at the same time.
+
+## Reporting
+- End every task with: what changed, how it was verified, what is still
+  uncertain. No "done" without evidence.
+
+# Cost note: every line in this file is re-read on every turn.
+# If a rule has not fired in a month, delete it.

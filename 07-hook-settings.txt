@@ -1,0 +1,51 @@
+HOOKS AND PERMISSIONS — example
+Hooks are scripts the harness runs at loop events. The model cannot
+talk its way past them. Permissions decide what runs without asking.
+------------------------------------------------------------------------
+
+.claude/settings.json
+
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(python3 validate.py)"
+    ],
+    "deny": [
+      "Bash(* --apply*)",
+      "Bash(schedctl *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command",
+                     "command": "cat decisions/log.md | head -40" } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Write|Edit",
+        "hooks": [ { "type": "command",
+                     "command": "scripts/guard-roadmap.sh" } ] }
+    ]
+  }
+}
+
+scripts/guard-roadmap.sh
+
+  #!/bin/sh
+  # Block any edit to the roadmap unless today's decision log has an entry.
+  input=$(cat)
+  case "$input" in
+    *roadmap/*)
+      if ! grep -q "$(date +%Y-%m-%d)" decisions/log.md; then
+        echo "Blocked: add a decision-log entry before editing the roadmap." >&2
+        exit 2
+      fi ;;
+  esac
+  exit 0
+
+------------------------------------------------------------------------
+What this buys: the agent can read everything and run the safe check,
+can never apply a production change, starts every session knowing the
+latest decisions, and cannot touch the roadmap without a paper trail.

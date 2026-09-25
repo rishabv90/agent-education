@@ -1,0 +1,27 @@
+# AGENTS.md — example for a PM workspace
+# Harness-neutral: any agent (Claude, Codex, Gemini, Jet Ski) reads this first.
+
+## What this workspace is
+Product docs for the GPU compute scheduling team: PRDs, launch plans,
+metric definitions, decision log, customer-feedback notes.
+
+## Where the truth lives
+- Metric definitions: /metrics/definitions.md  (never invent a metric)
+- Decisions: /decisions/log.md  (newest first; a decision is only real if it is here)
+- Roadmap: /roadmap/current.md  (read-only for agents)
+
+## Rules
+- Cite a file and line for every factual claim.
+- If two docs disagree, report both and say which is newer. Do not pick silently.
+- Never write to /roadmap. Propose changes in /proposals instead.
+- Nothing leaves this workspace: no external doc may include internal
+  metric values, customer names, or unreleased dates.
+
+## Templates
+- PRD: /templates/prd.md
+- Launch readiness: /templates/launch-checklist.md
+- Decision record: /templates/decision.md
+
+## Done means
+The document follows its template, every number is cited, and open
+questions are listed at the end instead of guessed.

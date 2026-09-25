@@ -1,0 +1,46 @@
+PROMPT — A TASK CONTRACT
+What the agent is told for ONE job. This is the prompt from the live case.
+------------------------------------------------------------------------
+
+WEAK (what most people type)
+  Investigate why the GPU queue is slow.
+
+STRONG (an execution contract)
+
+  OUTCOME
+    Determine the most likely cause of the p99 admission-queue regression
+    on gpu-west-2 following scheduler rollout R17.
+
+  CONTEXT
+    Use only the files in this folder: queue telemetry, dashboard export,
+    utilization and fragmentation report, capacity snapshot, rollout notes,
+    quota policy v3.2, and the two incident tickets.
+    Treat the architecture overview as possibly out of date.
+
+  CONSTRAINTS
+    Do not modify production configuration.
+    Do not request quota changes.
+
+  AUTHORITY
+    You may read every file and run validate.py.
+    You may NOT run anything with --apply, --rollback, or --set.
+    Anything that changes production needs a human.
+
+  ACCEPTANCE TESTS
+    Every claim cites a file and a row or line.
+    You ran validate.py and quote its output.
+    You explain any disagreement between two data sources.
+
+  STOPPING CONDITIONS
+    Stop when you can name a cause with evidence and one reversible action.
+    Stop and escalate if the only fix you can find is irreversible.
+    Stop after 20 tool calls regardless.
+
+  REPORTING
+    Return six sections: confirmed facts, contradictory evidence,
+    ranked hypotheses, checks performed, one recommended reversible action,
+    confidence and remaining uncertainty.
+
+------------------------------------------------------------------------
+Why it matters: the weak prompt leaves the agent to guess the outcome,
+the boundaries, and when it is done. The strong one is a PRD for one job.

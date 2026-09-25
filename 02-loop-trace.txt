@@ -1,0 +1,42 @@
+LOOP — WHAT ONE AGENT ACTUALLY DOES, TURN BY TURN
+A trimmed trace of the live case. Each turn: think, act, observe, decide.
+------------------------------------------------------------------------
+
+TURN 1
+  think    I should read the brief before touching data.
+  act      read README.md
+  observe  Contract: find cause, no prod changes, run validate.py.
+  decide   Not done. Continue.
+
+TURN 2
+  think    Which pool regressed? The dashboard is cluster-wide.
+  act      run  python3 validate.py
+  observe  pool-a p99 +45%, pool-b -3%. pool-a: 117 GPUs free,
+           but only 3 nodes can place an 8-GPU job.
+  decide   Not done: I have a symptom, not a cause.
+
+TURN 3
+  think    What changed at the time the regression started?
+  act      read rollout_notes_R17.md
+  observe  R17 changed bin-packing (pack -> spread) and made gang
+           scheduling strict. Staged 14:00 / 16:00 / 18:00.
+  decide   Not done: does the timing match the stages?
+
+TURN 4
+  think    Check the ticket's theory before accepting mine.
+  act      read ticket_INC-4471.md
+  observe  Ticket blames a 128-GPU job started at noon, and asks for
+           a quota bump.
+  decide   Test it: the job runs in pool-b, and pool-b is flat.
+           Correlation, not cause. Quota bump is outside my authority.
+
+TURN 5
+  think    Confirm the fragmentation step lines up with the rollout.
+  act      read gpu_utilization_fragmentation.csv (pool-a, 22 Sep)
+  observe  Fragmentation 0.18 -> 0.41 in steps at 14:00, 16:00, 18:00.
+  decide   STOP. Cause has evidence. One reversible action exists:
+           flip the bin-packing flag on pool-a only.
+
+------------------------------------------------------------------------
+The decide step is the whole game. Without a stopping condition, an agent
+keeps looping: it retries, re-reads, and spends tokens forever.

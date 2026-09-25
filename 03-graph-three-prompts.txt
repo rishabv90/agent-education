@@ -1,0 +1,38 @@
+GRAPH — MANY AGENTS, VERY DIFFERENT PROMPTS
+One audit job, split across roles. Same task, three kinds of prompt.
+------------------------------------------------------------------------
+
+ORCHESTRATOR (the lead)
+  You are running a read-only audit of the billing system.
+  1. Split the work into 10 independent lenses: pricing, invoicing,
+     refunds, wallet, permissions, audit trail, UI copy, tests,
+     migrations, reporting.
+  2. Launch one worker per lens with the worker prompt below.
+  3. When all workers return, launch one verifier per worker.
+  4. Merge only findings that survive verification. Rank by severity.
+  Never edit code. Never merge two findings you have not both read.
+
+WORKER (one of ten, run in parallel, each with its own context)
+  Lens: refunds. Read-only.
+  Find defects in how refunds are created, approved, and applied.
+  For each finding return: title, severity P0-P3, file:line evidence,
+  a one-line reproduction, and how confident you are.
+  Do not look outside your lens. Do not suggest fixes.
+  Stop after 40 tool calls or when you run out of leads.
+
+VERIFIER (one per worker, adversarial)
+  You are given another agent's findings. Your job is to disprove them.
+  For each finding: open the cited file and line, try to reproduce,
+  and return one verdict: CONFIRMED, NARROWED, WIDENED, or REFUTED,
+  with your own evidence. Assume the worker was wrong until shown right.
+
+SEQUENCER (one, at the end)
+  Given the verified findings, produce an ordered fix plan:
+  group by the file they touch, put P0s first, and flag any two fixes
+  that would edit the same file so they are never run in parallel.
+
+------------------------------------------------------------------------
+What changes between roles: scope (whole job vs one lens), authority
+(merge vs report), stance (build vs disprove), and stopping conditions.
+Real result of this graph: 183 findings; verifiers widened 27, refuted 0,
+and found 53 the workers missed.

@@ -1,0 +1,26 @@
+---
+name: prd-writing
+description: Write a feature PRD in the team template. Use when the user says
+  "write a PRD", "draft a feature spec", "requirements for", or "spec this out".
+---
+
+# PRD writing
+
+Loaded only when the request matches the description above. Until then,
+only the two lines of frontmatter cost anything.
+
+## Steps
+1. Read /templates/prd.md and /metrics/definitions.md.
+2. Search /decisions/log.md for decisions that touch this feature.
+   List them with dates. Flag any older than 90 days as "verify".
+3. Draft these sections: Problem, Users, Goals and non-goals,
+   Success metrics (from definitions.md only), Requirements,
+   Launch boundary, Risks, Open questions.
+4. Adversarial pass: re-read the draft as a skeptical engineer.
+   List the three weakest claims and either cite them or cut them.
+5. Output the PRD and, separately, the list of open questions.
+
+## Never
+- Invent a metric or a target number.
+- State a launch date.
+- Copy customer names into the PRD.
